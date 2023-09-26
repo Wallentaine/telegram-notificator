@@ -45,4 +45,55 @@ export class AccountRepository {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public async getAccountByTelegramUserId(telegramUserId: number): Promise<AccountDocument> {
+        const loggerContext = `${Account.name}/${this.getAccountByTelegramUserId.name}`;
+
+        try {
+            return await this.accountModel.findOne({ 'telegramUsers.telegramId': telegramUserId });
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public async getAccountsByTelegramUserId(telegramUserId: number): Promise<AccountDocument[]> {
+        const loggerContext = `${Account.name}/${this.getAccountsByTelegramUserId.name}`;
+
+        try {
+            const accounts: AccountDocument[] = [];
+
+            for await (const appAccount of this.accountModel.find({ 'telegramUsers.telegramId': telegramUserId })) {
+                accounts.push(appAccount);
+            }
+
+            return accounts;
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public async migrateChat(oldChatId: number, newChatId: number): Promise<void> {
+        const loggerContext = `${Account.name}/${this.migrateChat.name}`;
+
+        try {
+            for await (const appAccount of this.accountModel.find({ 'telegramUsers.telegramId': oldChatId })) {
+                appAccount.telegramUsers = [...appAccount.telegramUsers].map((telegramUser) => {
+                    if (telegramUser.telegramId === oldChatId) {
+                        return {
+                            ...telegramUser,
+                            telegramId: newChatId,
+                        };
+                    }
+                    return telegramUser;
+                });
+
+                await this.updateAccountByID(appAccount);
+            }
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { Start, Update as UpdateDecorator, Ctx, On, Message as MessageDecorator } from 'nestjs-telegraf';
+import { Start, Update as UpdateDecorator, Ctx } from 'nestjs-telegraf';
 import { Context, Scenes, Telegraf } from 'telegraf';
 import { Message, Update } from 'typegram';
 import MessageUpdate = Update.MessageUpdate;
@@ -10,18 +10,18 @@ import { AccountRepository } from '../account/account.repository';
 type TelegrafContext = Scenes.SceneContext;
 
 @UpdateDecorator()
-export class BotService extends Telegraf<TelegrafContext> {
+export class BotStartService extends Telegraf<TelegrafContext> {
     constructor(
-        private readonly configService: ConfigService,
+        readonly configService: ConfigService,
         private readonly logger: MarlboroLoggerService,
         private readonly accountRepository: AccountRepository
     ) {
-        super(configService.get('TELEGRAM_API'));
+        super(configService.get('BOT_TOKEN'));
     }
 
     @Start()
     async onStart(@Ctx() ctx: Context): Promise<void> {
-        const loggerContext = `${BotService.name}/${this.onStart.name}`;
+        const loggerContext = `${BotStartService.name}/${this.onStart.name}`;
 
         try {
             if (!(ctx as Context<MessageUpdate<TextMessage>>)) {
@@ -57,18 +57,17 @@ export class BotService extends Telegraf<TelegrafContext> {
             }
 
             const telegramUserId = refinedContext.update.message.from.id;
+            const telegramUserName = refinedContext.update.message.from.last_name
+                ? refinedContext.update.message.from.first_name + ' ' + refinedContext.update.message.from.last_name
+                : refinedContext.update.message.from.first_name;
 
-            if (appAccount.telegramUsers?.find((telegramUser) => telegramUser.telegramId === telegramUserId)) {
-                this.logger.error('Telegram user exist in account', loggerContext);
+            if (appAccount.telegramUsers.find((telegramUser) => telegramUser.telegramId === telegramUserId)) {
+                this.logger.error(`Telegram user ${telegramUserName} with id - ${telegramUserId} exist in account ${appAccount.subdomain} with id - ${appAccount.id}`, loggerContext);
 
                 await refinedContext.replyWithHTML(`Вы уже подключены к аккаунту ${appAccount.subdomain} amoCRM`);
 
                 return;
             }
-
-            const telegramUserName = refinedContext.update.message.from.last_name
-                ? refinedContext.update.message.from.first_name + ' ' + refinedContext.update.message.from.last_name
-                : refinedContext.update.message.from.first_name;
 
             appAccount.telegramUsers = [
                 ...appAccount.telegramUsers,
@@ -98,10 +97,5 @@ export class BotService extends Telegraf<TelegrafContext> {
         } catch (error) {
             this.logger.error(error, loggerContext);
         }
-    }
-
-    @On('text')
-    async onMessage(@MessageDecorator('text') message: string, @Ctx() ctx: Context) {
-        await ctx.replyWithHTML('salam');
     }
 }
