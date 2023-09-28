@@ -7,9 +7,11 @@ import { AccountRepository } from '../account/account.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Account, AccountSchema } from '../account/account.model';
 import { BotStartService } from './bot-start.service';
-import { BotJoinGroupService } from './bot-join-group.service';
+import { BotGroupService } from './bot-group.service';
 import { BotChatMigrateService } from './bot-chat-migrate.service';
 import { BotTextService } from './bot-text.service';
+import { BotChannelService } from './bot-channel.service';
+import { BotJoinChatService } from './bot-join-chat.service';
 
 @Module({
     imports: [
@@ -22,6 +24,15 @@ import { BotTextService } from './bot-text.service';
         ]),
         AccountModule,
     ],
-    providers: [BotStartService, BotJoinGroupService, BotTextService, BotChatMigrateService, MarlboroLoggerService, AccountRepository],
+    providers: [
+        BotStartService,
+        BotJoinChatService,
+        BotGroupService,
+        BotChannelService,
+        BotTextService,
+        BotChatMigrateService,
+        MarlboroLoggerService,
+        AccountRepository,
+    ],
 })
 export class BotModule {}

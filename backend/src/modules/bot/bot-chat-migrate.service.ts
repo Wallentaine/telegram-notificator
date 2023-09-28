@@ -4,7 +4,7 @@ import { Message, Update } from 'typegram';
 import { MarlboroLoggerService } from '../marlboro-logger/marlboro-logger.service';
 import { ConfigService } from '@nestjs/config';
 import { AccountRepository } from '../account/account.repository';
-import { CustomContext } from './types/CustomContext';
+import { CustomContextTypes } from './types/CustomContext.types';
 
 type TelegrafContext = Scenes.SceneContext;
 
@@ -19,7 +19,7 @@ export class BotChatMigrateService extends Telegraf<TelegrafContext> {
     }
 
     @On('migrate_to_chat_id')
-    async onMigrate(@Ctx() migrateCtx: CustomContext): Promise<void> {
+    async onMigrate(@Ctx() migrateCtx: CustomContextTypes): Promise<void> {
         const loggerContext = `${BotChatMigrateService.name}/${this.onMigrate.name}`;
 
         try {
