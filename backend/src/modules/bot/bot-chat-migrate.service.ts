@@ -1,10 +1,9 @@
 import { Update as UpdateDecorator, Ctx, On } from 'nestjs-telegraf';
-import { NarrowedContext, Scenes, Telegraf } from 'telegraf';
-import { Message, Update } from 'typegram';
-import { MarlboroLoggerService } from '../marlboro-logger/marlboro-logger.service';
+import { Scenes, Telegraf } from 'telegraf';
+import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
 import { ConfigService } from '@nestjs/config';
 import { AccountRepository } from '../account/account.repository';
-import { CustomContextTypes } from './types/CustomContext.types';
+import { CustomContextTypes } from './types/custom-context.types';
 
 type TelegrafContext = Scenes.SceneContext;
 

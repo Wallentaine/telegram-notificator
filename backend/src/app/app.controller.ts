@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Endpoints } from './consts/endpoints';
+import { Endpoints } from '../core/consts/endpoints';
 import { HttpStatusCode } from 'axios';
 
 @ApiTags('Работа с сервером')

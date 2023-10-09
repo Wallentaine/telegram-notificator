@@ -5,6 +5,9 @@ export const AmoEndPoints = {
     Contacts: {
         Base: 'contacts',
     },
+    Companies: {
+        Base: 'companies',
+    },
     Account: {
         Base: 'account',
     },

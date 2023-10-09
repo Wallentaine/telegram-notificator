@@ -4,7 +4,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccountInstallDto } from './dto/account-install.dto';
 import { AccountUninstallDto } from './dto/account-uninstall.dto';
 import { AccountDocument } from './account.model';
-import { Endpoints } from '../../consts/endpoints';
+import { Endpoints } from '../../core/consts/endpoints';
 
 @ApiTags('Работа с пользователем виджета')
 @Controller()

@@ -2,9 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AmoApiService } from '../amo-api/amo-api.service';
 import { Account, AccountDocument } from './account.model';
 import { AccountRepository } from './account.repository';
-import * as dayjs from 'dayjs';
-import { getEndOfTrialPeriodDate, getStartUsingDate } from '../../utils/calculate-trial-period.utils';
-import { MarlboroLoggerService } from '../marlboro-logger/marlboro-logger.service';
+import dayjs from 'dayjs';
+import { getEndOfTrialPeriodDate, getStartUsingDate } from '../../core/helpers/calculate-trial-period.helper';
+import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
+import { CronSettings } from './constants/cron-settings';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class AccountService {
@@ -122,6 +124,54 @@ export class AccountService {
             }
 
             return user.isPaid || user.isTrial;
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Cron(CronSettings.CronPaymentStatusCheckTime)
+    protected async accountsPaymentStatusLoop(): Promise<void> {
+        const loggerContext = `${AccountService.name}/${this.accountsPaymentStatusLoop.name}`;
+
+        try {
+            const accountDocuments = await this.accountRepository.getAllAccounts();
+
+            for (const accountDocument of accountDocuments) {
+                await this.accountPaymentChecker(accountDocument);
+            }
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private async accountPaymentChecker(accountDocument: AccountDocument): Promise<void> {
+        const loggerContext = `${AccountService.name}/${this.accountPaymentChecker.name}`;
+
+        try {
+            if (!accountDocument.isActive) {
+                this.logger.info(`Account is disabled!`, loggerContext, accountDocument.subdomain);
+                return;
+            }
+
+            if (accountDocument.isPaid && dayjs(accountDocument.finishPaymentDate).diff(dayjs()) <= 0) {
+                accountDocument.isPaid = false;
+                accountDocument.isActive = false;
+                await this.accountRepository.updateAccountByID(accountDocument);
+                this.logger.info('Account was disabled by reason: End of payment period', loggerContext, accountDocument.subdomain);
+                return;
+            }
+
+            if (dayjs(accountDocument.finishTrialDate).diff(dayjs()) <= 0) {
+                accountDocument.isTrial = false;
+                accountDocument.isActive = false;
+                await this.accountRepository.updateAccountByID(accountDocument);
+                this.logger.info('Account was disabled by reason: End of trial period', loggerContext, accountDocument.subdomain);
+                return;
+            }
+
+            this.logger.info('Account is active!', loggerContext, accountDocument.subdomain);
         } catch (error) {
             this.logger.error(error, loggerContext);
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

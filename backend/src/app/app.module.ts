@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { BotModule } from './modules/bot/bot.module';
-import { AccountModule } from './modules/account/account.module';
-import { MarlboroLoggerService } from './modules/marlboro-logger/marlboro-logger.service';
-import { AmoApiModule } from './modules/amo-api/amo-api.module';
+import { BotModule } from '../modules/bot/bot.module';
+import { AccountModule } from '../modules/account/account.module';
+import { MarlboroLoggerService } from '../core/marlboro-logger/marlboro-logger.service';
+import { AmoApiModule } from '../modules/amo-api/amo-api.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import * as Joi from 'joi';
         MongooseModule.forRoot(process.env.MONGO_CONNECT, {
             dbName: process.env.MONGO_NAME,
         }),
+        ScheduleModule.forRoot(),
         BotModule,
         AccountModule,
         AmoApiModule,

@@ -3,6 +3,13 @@ import { HydratedDocument } from 'mongoose';
 
 export type AccountDocument = HydratedDocument<Account>;
 
+export type TelegramUser = {
+    telegramId: number;
+    telegramUserName: string;
+    amoUserId: number;
+    amoUserName: string;
+};
+
 @Schema()
 export class Account {
     @Prop({ required: true })
@@ -39,7 +46,7 @@ export class Account {
     public isActive: boolean;
 
     @Prop({ required: false, default: [] })
-    public telegramUsers: { telegramId: number; telegramUserName: string }[];
+    public telegramUsers: TelegramUser[];
 }
 
 export const AccountSchema = SchemaFactory.createForClass(Account);

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { options } from './bot.config';
-import { MarlboroLoggerService } from '../marlboro-logger/marlboro-logger.service';
+import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
 import { AccountModule } from '../account/account.module';
 import { AccountRepository } from '../account/account.repository';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -12,6 +12,11 @@ import { BotChatMigrateService } from './bot-chat-migrate.service';
 import { BotTextService } from './bot-text.service';
 import { BotChannelService } from './bot-channel.service';
 import { BotJoinChatService } from './bot-join-chat.service';
+import { BotController } from './bot.controller';
+import { BotService } from './bot.service';
+import { AmoApiService } from '../amo-api/amo-api.service';
+import { AmoApiModule } from '../amo-api/amo-api.module';
+import { BotNotifyService } from './bot-notify.service';
 
 @Module({
     imports: [
@@ -23,6 +28,7 @@ import { BotJoinChatService } from './bot-join-chat.service';
             },
         ]),
         AccountModule,
+        AmoApiModule,
     ],
     providers: [
         BotStartService,
@@ -30,9 +36,13 @@ import { BotJoinChatService } from './bot-join-chat.service';
         BotGroupService,
         BotChannelService,
         BotTextService,
+        BotNotifyService,
         BotChatMigrateService,
         MarlboroLoggerService,
         AccountRepository,
+        BotService,
+        AmoApiService,
     ],
+    controllers: [BotController],
 })
 export class BotModule {}

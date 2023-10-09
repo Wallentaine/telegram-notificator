@@ -187,6 +187,83 @@ export type CommonType = {
     text: string;
 };
 
+export type CallinType = {
+    uniq: string;
+    duration: number;
+    source: string;
+    link: string;
+    phone: string;
+};
+
+export type CallOutType = {
+    uniq: string;
+    duration: number;
+    source: string;
+    link: string;
+    phone: string;
+};
+
+export type ServiceMessageType = {
+    service: string;
+    text: string;
+};
+
+export type MessageCshierType = {
+    status: string;
+    text: string;
+};
+
+export type GeolocationType = {
+    text: string;
+    address: string;
+    longitude: string;
+    latitude: string;
+};
+
+export type SmsInType = {
+    text: string;
+    phone: string;
+};
+
+export type SmsOutType = {
+    text: string;
+    phone: string;
+};
+
+export type Note = {
+    id: number;
+    entity_id: number;
+    created_by: number;
+    updated_by: number;
+    created_at: number;
+    updated_at: number;
+    responsible_user_id: number;
+    group_id: number;
+    note_type: string;
+    params: CommonType | CallinType | CallOutType | ServiceMessageType | MessageCshierType | GeolocationType | SmsInType | SmsOutType;
+    account_id: number;
+    _links: {
+        self: {
+            href: string;
+        };
+    };
+};
+
+export type NoteList = {
+    _page: number;
+    _links: {
+        self: {
+            href: string;
+        };
+        next?: {
+            href: string;
+        };
+    };
+    _embedded: {
+        notes: Note[] | null;
+    };
+};
+
 export type CreatedNote = {
     entity_id?: number;
     created_by?: number;

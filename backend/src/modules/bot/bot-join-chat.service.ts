@@ -1,11 +1,11 @@
 import { Update as UpdateDecorator, Ctx, Next } from 'nestjs-telegraf';
 import { Markup, Scenes, Telegraf } from 'telegraf';
-import { MarlboroLoggerService } from '../marlboro-logger/marlboro-logger.service';
+import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
 import { ConfigService } from '@nestjs/config';
 import { AccountRepository } from '../account/account.repository';
-import { ActionCustomContext, CustomChannelContext, CustomContextTypes } from './types/CustomContext.types';
+import { ActionCustomContext, CustomChannelContext, CustomContextTypes } from './types/custom-context.types';
 import { NextFunction } from 'express';
-import { JoinChatInfoTypes } from './types/JoinChatInfo.types';
+import { JoinChatInfoTypes } from './types/join-chat-info.types';
 
 type TelegrafContext = Scenes.SceneContext;
 
@@ -116,6 +116,8 @@ export class BotJoinChatService extends Telegraf<TelegrafContext> {
             appAccount.telegramUsers.push({
                 telegramId: chatInfo.chatId,
                 telegramUserName: chatInfo.chatTitle,
+                amoUserId: null,
+                amoUserName: null,
             });
 
             await this.accountRepository.updateAccountByID(appAccount);
@@ -176,6 +178,8 @@ export class BotJoinChatService extends Telegraf<TelegrafContext> {
             account.telegramUsers.push({
                 telegramId: groupId,
                 telegramUserName: groupTitle,
+                amoUserId: null,
+                amoUserName: null,
             });
 
             await this.accountRepository.updateAccountByID(account);

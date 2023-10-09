@@ -3,7 +3,7 @@ import { Context, Scenes, Telegraf } from 'telegraf';
 import { Message, Update } from 'typegram';
 import MessageUpdate = Update.MessageUpdate;
 import TextMessage = Message.TextMessage;
-import { MarlboroLoggerService } from '../marlboro-logger/marlboro-logger.service';
+import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
 import { ConfigService } from '@nestjs/config';
 import { AccountRepository } from '../account/account.repository';
 
@@ -62,7 +62,10 @@ export class BotStartService extends Telegraf<TelegrafContext> {
                 : refinedContext.update.message.from.first_name;
 
             if (appAccount.telegramUsers.find((telegramUser) => telegramUser.telegramId === telegramUserId)) {
-                this.logger.error(`Telegram user ${telegramUserName} with id - ${telegramUserId} exist in account ${appAccount.subdomain} with id - ${appAccount.id}`, loggerContext);
+                this.logger.error(
+                    `Telegram user ${telegramUserName} with id - ${telegramUserId} exist in account ${appAccount.subdomain} with id - ${appAccount.id}`,
+                    loggerContext
+                );
 
                 await refinedContext.replyWithHTML(`Вы уже подключены к аккаунту ${appAccount.subdomain} amoCRM`);
 
@@ -74,6 +77,8 @@ export class BotStartService extends Telegraf<TelegrafContext> {
                 {
                     telegramId: telegramUserId,
                     telegramUserName: telegramUserName,
+                    amoUserId: null,
+                    amoUserName: null,
                 },
             ];
 

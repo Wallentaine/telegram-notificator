@@ -9,7 +9,7 @@ import * as path from 'path';
 import { AuthQueryDto } from './dto/auth-query.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { MarlboroLoggerService } from '../marlboro-logger/marlboro-logger.service';
+import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
 
 dotenv.config({
     path: path.resolve(__dirname, '..', '..', '..', `.${process.env.NODE_ENV}.env`),

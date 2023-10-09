@@ -10,16 +10,20 @@ import {
     CreatedContactEmbedded,
     AmoContact,
     CreatedNote,
+    Note,
+    NoteList,
 } from './amo-api.types';
 import { UseTokenAuthorization } from './useTokenAuthorization.decorator';
 import * as process from 'process';
 import { AuthQueryDto } from './dto/auth-query.dto';
 import { AccountRepository } from '../account/account.repository';
 import { AccountDocument } from '../account/account.model';
-import { AmoEndPoints } from 'src/consts/amo-endpoints';
-import { RequestTypes } from 'src/consts/request-types';
-import { AuthTypes } from 'src/consts/auth-types';
-import { MarlboroLoggerService } from '../marlboro-logger/marlboro-logger.service';
+import { AmoEndPoints } from 'src/modules/amo-api/constants/amo-endpoints';
+import { RequestTypes } from 'src/modules/amo-api/constants/request-types';
+import { AuthTypes } from 'src/modules/amo-api/constants/auth-types';
+import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
+import { LeadData } from '../../core/helpers/interpolation/types/amo-types/lead/lead';
+import { Contact } from '../../core/helpers/interpolation/types/amo-types/contacts/contact';
 
 @Injectable()
 export class AmoApiService {
@@ -168,5 +172,69 @@ export class AmoApiService {
             `${AmoEndPoints.Leads.Base}/${leadId}/${AmoEndPoints.Notes.Base}`,
             [noteInfo]
         );
+    }
+
+    @UseTokenAuthorization()
+    public async getDeal({ accountId, token }: AuthQueryDto, leadId: number, withParams: string[] = []): Promise<LeadData> {
+        const accountInfo = await this.getAccountInfo({ accountId, token });
+
+        const arrayOfWithParams = withParams.map((withParam) => `with=${withParam}`);
+
+        const textWithParams = arrayOfWithParams.length > 1 ? arrayOfWithParams.join('&') : arrayOfWithParams.join('');
+
+        const { data: response } = await this.apiRequest<LeadData>(
+            accountInfo.subdomain,
+            token,
+            RequestTypes.Get,
+            `${AmoEndPoints.Leads.Base}/${leadId}?${textWithParams}`
+        );
+
+        return response;
+    }
+
+    @UseTokenAuthorization()
+    public async getContactById({ accountId, token }: AuthQueryDto, contactId: number): Promise<Contact> {
+        const accountInfo = await this.getAccountInfo({ accountId, token });
+
+        const { data: response } = await this.apiRequest<Contact>(
+            accountInfo.subdomain,
+            token,
+            RequestTypes.Get,
+            `${AmoEndPoints.Contacts.Base}/${contactId}`
+        );
+
+        return response;
+    }
+
+    @UseTokenAuthorization()
+    public async getCompanyById({ accountId, token }: AuthQueryDto, companyId: number): Promise<Contact> {
+        const accountInfo = await this.getAccountInfo({ accountId, token });
+
+        const { data: response } = await this.apiRequest<Contact>(
+            accountInfo.subdomain,
+            token,
+            RequestTypes.Get,
+            `${AmoEndPoints.Companies.Base}/${companyId}`
+        );
+
+        return response;
+    }
+
+    @UseTokenAuthorization()
+    public async getNotesByLeadId({ accountId, token }: AuthQueryDto, leadId: number): Promise<Note[]> {
+        const accountInfo = await this.getAccountInfo({ accountId, token });
+
+        const {
+            data: {
+                _embedded: { notes },
+            },
+        } = await this.apiRequest<NoteList>(
+            accountInfo.subdomain,
+            token,
+            RequestTypes.Get,
+            `${AmoEndPoints.Leads.Base}/${leadId}/${AmoEndPoints.Notes.Base}`
+        );
+
+        return notes;
     }
 }

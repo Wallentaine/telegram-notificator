@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MarlboroLoggerService } from './modules/marlboro-logger/marlboro-logger.service';
+import { MarlboroLoggerService } from '../core/marlboro-logger/marlboro-logger.service';
 
 @Injectable()
 export class AppService {

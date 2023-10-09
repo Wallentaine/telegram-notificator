@@ -1,0 +1,16 @@
+export const AmoFieldTypes = {
+    Text: 'text',
+    Multitext: 'multitext',
+    Url: 'url',
+    Streetaddress: 'streetaddress',
+    Numeric: 'numeric',
+    DateTime: 'date_time',
+    Date: 'date',
+    Birthday: 'birthday',
+    SmartAddress: 'smart_address',
+    Multiselect: 'multiselect',
+    Select: 'select',
+    Radiobutton: 'radiobutton',
+    Checkbox: 'checkbox',
+    LegalEntity: 'legal_entity',
+};
