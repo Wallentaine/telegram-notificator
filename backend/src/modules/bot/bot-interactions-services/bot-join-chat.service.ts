@@ -1,11 +1,11 @@
 import { Update as UpdateDecorator, Ctx, Next } from 'nestjs-telegraf';
 import { Markup, Scenes, Telegraf } from 'telegraf';
-import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
+import { MarlboroLoggerService } from '../../../core/marlboro-logger/marlboro-logger.service';
 import { ConfigService } from '@nestjs/config';
-import { AccountRepository } from '../account/account.repository';
-import { ActionCustomContext, CustomChannelContext, CustomContextTypes } from './types/custom-context.types';
+import { AccountRepository } from '../../account/account.repository';
+import { ActionCustomContext, CustomChannelContext, CustomContextTypes } from '../types/custom-context.types';
 import { NextFunction } from 'express';
-import { JoinChatInfoTypes } from './types/join-chat-info.types';
+import { JoinChatInfoTypes } from '../types/join-chat-info.types';
 
 type TelegrafContext = Scenes.SceneContext;
 

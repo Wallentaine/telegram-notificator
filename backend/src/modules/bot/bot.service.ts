@@ -10,12 +10,15 @@ import interpolation from '../../core/helpers/interpolation';
 import { Scenes, Telegraf } from 'telegraf';
 import { ConfigService } from '@nestjs/config';
 import { RegexExpressions } from '../../core/helpers/interpolation/consts/regexExpressions';
-import { BotNotifyService } from './bot-notify.service';
+import { BotNotifyService } from './bot-interactions-services/bot-notify.service';
 import { ReceivedMessageData } from './types/received-message.data';
 import { MessageSettings } from './types/message-settings.types';
 import { NoteTypes } from '../amo-api/constants/note-types';
+import { BoundLead } from './types/bound-lead.types';
 
 type TelegrafContext = Scenes.SceneContext;
+
+const COUNT_NOTES_FOR_SEND = 3;
 
 @Injectable()
 export class BotService extends Telegraf<TelegrafContext> {
@@ -50,17 +53,21 @@ export class BotService extends Telegraf<TelegrafContext> {
                 token: appAccount.accessToken,
             };
 
-            const currentDeal = await this.amoApiService.getDeal(accessInformation, leadId, ['contacts']);
+            const boundLeadWithEntities: BoundLead = {
+                lead: await this.amoApiService.getDeal(accessInformation, leadId, ['contacts']),
+                contact: null,
+                company: null,
+            };
 
-            const pickedEntities = interpolation.getPickedEntities(currentDeal._embedded);
+            const pickedEntities = interpolation.getPickedEntities(boundLeadWithEntities.lead._embedded);
 
             const mainContact = pickedEntities?.contacts?.length ? interpolation.getMainContact(pickedEntities.contacts) : null;
 
             const [company] = pickedEntities?.companies?.length ? pickedEntities.companies : [null];
 
-            const amoContact = mainContact ? await this.amoApiService.getContactById(accessInformation, mainContact.id) : null;
+            boundLeadWithEntities.contact = mainContact ? await this.amoApiService.getContactById(accessInformation, mainContact.id) : null;
 
-            const amoCompany = company ? await this.amoApiService.getCompanyById(accessInformation, company.id) : null;
+            boundLeadWithEntities.company = company ? await this.amoApiService.getCompanyById(accessInformation, company.id) : null;
 
             const receivedHookSettings = hook.action.settings.widget.settings;
 
@@ -72,9 +79,9 @@ export class BotService extends Telegraf<TelegrafContext> {
             if (interpolation.isExistInterpolation(hookMessageData.receivedMessage)) {
                 hookMessageData.preparedMessage = interpolation.interpolateText(
                     hookMessageData.receivedMessage,
-                    currentDeal,
-                    amoContact,
-                    amoCompany
+                    boundLeadWithEntities.lead,
+                    boundLeadWithEntities.contact,
+                    boundLeadWithEntities.company
                 );
             }
 
@@ -98,7 +105,7 @@ export class BotService extends Telegraf<TelegrafContext> {
 
                 hookMessageData.preparedMessage += filteredNotesByText?.length && '\n\n' + 'Примечания:' + '\n';
 
-                filteredNotesByText.length > 3 && filteredNotesByText.splice(-3);
+                filteredNotesByText.length > COUNT_NOTES_FOR_SEND && filteredNotesByText.splice(-COUNT_NOTES_FOR_SEND);
 
                 filteredNotesByText.forEach((note) => {
                     hookMessageData.preparedMessage += 'text' in note?.params && note.params.text + '\n';
@@ -106,8 +113,10 @@ export class BotService extends Telegraf<TelegrafContext> {
             }
 
             for (const subscriber of subscribers) {
-                await this.notifyService.sendMessage(subscriber, hookMessageData, hookSettingsData);
+                await this.notifyService.sendMessage(subscriber, boundLeadWithEntities.lead.id, hookMessageData, hookSettingsData);
             }
+
+            this.logger.info(`All messages send account => ${appAccount.id}, subscribers => ${subscribers.join(', ')}`, loggerContext);
         } catch (error) {
             this.logger.error(error, loggerContext);
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

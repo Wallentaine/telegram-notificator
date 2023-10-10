@@ -1,16 +1,16 @@
 import { Update as UpdateDecorator, Ctx, On, Next, Action } from 'nestjs-telegraf';
 import { Scenes, Telegraf } from 'telegraf';
-import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
+import { MarlboroLoggerService } from '../../../core/marlboro-logger/marlboro-logger.service';
 import { ConfigService } from '@nestjs/config';
-import { AccountRepository } from '../account/account.repository';
+import { AccountRepository } from '../../account/account.repository';
+import { ActionCustomContext, CustomChannelContext } from '../types/custom-context.types';
 import { NextFunction } from 'express';
-import { ActionCustomContext, CustomContextTypes } from './types/custom-context.types';
 import { BotJoinChatService } from './bot-join-chat.service';
 
 type TelegrafContext = Scenes.SceneContext;
 
 @UpdateDecorator()
-export class BotGroupService extends Telegraf<TelegrafContext> {
+export class BotChannelService extends Telegraf<TelegrafContext> {
     constructor(
         private readonly configService: ConfigService,
         private readonly logger: MarlboroLoggerService,
@@ -20,17 +20,17 @@ export class BotGroupService extends Telegraf<TelegrafContext> {
         super(configService.get('BOT_TOKEN'));
     }
 
-    @On('text')
-    async onJoinGroup(@Ctx() groupCtx: CustomContextTypes, @Next() next: NextFunction): Promise<void> {
-        const loggerContext = `${BotGroupService.name}/${this.onJoinGroup.name}`;
+    @On('channel_post')
+    async joinChannel(@Ctx() channelCtx: CustomChannelContext, @Next() next: NextFunction): Promise<void> {
+        const loggerContext = `${BotChannelService.name}/${this.joinChannel.name}`;
 
         try {
-            if (groupCtx.update.message.chat.type !== 'group') {
+            if (channelCtx.update.channel_post.chat.type !== 'channel') {
                 next();
                 return;
             }
 
-            await this.joinService.joinChat(groupCtx, next);
+            await this.joinService.joinChat(channelCtx, next);
 
             return;
         } catch (error) {

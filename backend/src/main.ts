@@ -3,6 +3,8 @@ import { AppModule } from './app/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MarlboroLoggerService } from './core/marlboro-logger/marlboro-logger.service';
 import * as process from 'process';
+import { Endpoints } from './core/consts/endpoints';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, {
@@ -11,9 +13,15 @@ async function bootstrap() {
 
     const PORT = process.env.PORT || 3000;
 
-    app.setGlobalPrefix('tg-bot');
+    app.setGlobalPrefix(Endpoints.Global);
 
     app.enableCors();
+
+    // app.useGlobalPipes(
+    //     new ValidationPipe({
+    //         transform: true,
+    //     })
+    // );
 
     const config = new DocumentBuilder()
         .setTitle('Рефакторинг виджета "Уведомления в telegram от REON"')

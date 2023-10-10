@@ -3,9 +3,9 @@ import { Context, Scenes, Telegraf } from 'telegraf';
 import { Message, Update } from 'typegram';
 import MessageUpdate = Update.MessageUpdate;
 import TextMessage = Message.TextMessage;
-import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logger.service';
+import { MarlboroLoggerService } from '../../../core/marlboro-logger/marlboro-logger.service';
 import { ConfigService } from '@nestjs/config';
-import { AccountRepository } from '../account/account.repository';
+import { AccountRepository } from '../../account/account.repository';
 
 type TelegrafContext = Scenes.SceneContext;
 
