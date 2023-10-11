@@ -98,6 +98,19 @@ export class AccountRepository {
         }
     }
 
+    public async getTelegramUser(accountId: number, telegramUserId: number): Promise<TelegramUser> {
+        const loggerContext = `${Account.name}/${this.getTelegramUser.name}`;
+
+        try {
+            const appAccount = await this.getAccountById(accountId);
+
+            return appAccount.telegramUsers.find((telegramUser) => telegramUser.telegramId === telegramUserId);
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public async migrateChat(oldChatId: number, newChatId: number): Promise<void> {
         const loggerContext = `${Account.name}/${this.migrateChat.name}`;
 

@@ -17,12 +17,6 @@ async function bootstrap() {
 
     app.enableCors();
 
-    // app.useGlobalPipes(
-    //     new ValidationPipe({
-    //         transform: true,
-    //     })
-    // );
-
     const config = new DocumentBuilder()
         .setTitle('Рефакторинг виджета "Уведомления в telegram от REON"')
         .setDescription('Документация')

@@ -12,6 +12,7 @@ import {
     CreatedNote,
     Note,
     NoteList,
+    UnsortedData,
 } from './amo-api.types';
 import { UseTokenAuthorization } from './useTokenAuthorization.decorator';
 import * as process from 'process';
@@ -236,5 +237,53 @@ export class AmoApiService {
         );
 
         return notes;
+    }
+
+    @UseTokenAuthorization()
+    public async getUnsortedLeads({ accountId, token }: AuthQueryDto) {
+        const accountInfo = await this.getAccountInfo({ accountId, token });
+
+        const { data: response } = await this.apiRequest<UnsortedData>(
+            accountInfo.subdomain,
+            token,
+            RequestTypes.Get,
+            `${AmoEndPoints.Leads.Base}/${AmoEndPoints.Leads.Unsorted}`
+        );
+
+        return response;
+    }
+
+    @UseTokenAuthorization()
+    public async acceptUnsortedLead(
+        { accountId, token }: AuthQueryDto,
+        unsortedLeadUuid: string,
+        userId: number | null = null
+    ): Promise<void> {
+        const accountInfo = await this.getAccountInfo({ accountId, token });
+
+        await this.apiRequest(
+            accountInfo.subdomain,
+            token,
+            RequestTypes.Post,
+            `${AmoEndPoints.Leads.Base}/${AmoEndPoints.Leads.Unsorted}/${unsortedLeadUuid}/${AmoEndPoints.Leads.UnsortedAccept}`,
+            userId ? { user_id: userId } : {}
+        );
+    }
+
+    @UseTokenAuthorization()
+    public async rejectUnsortedLead(
+        { accountId, token }: AuthQueryDto,
+        unsortedLeadUuid: string,
+        userId: number | null = null
+    ): Promise<void> {
+        const accountInfo = await this.getAccountInfo({ accountId, token });
+
+        await this.apiRequest(
+            accountInfo.subdomain,
+            token,
+            RequestTypes.Post,
+            `${AmoEndPoints.Leads.Base}/${AmoEndPoints.Leads.Unsorted}/${unsortedLeadUuid}/${AmoEndPoints.Leads.UnsortedReject}`,
+            userId ? { user_id: userId } : {}
+        );
     }
 }

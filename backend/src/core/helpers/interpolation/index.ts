@@ -8,7 +8,7 @@ import { Contact } from './types/amo-types/contacts/contact';
 import { Company } from './types/amo-types/companies/company';
 
 class Interpolation {
-    public isExistInterpolation = (text: string): boolean => new RegExp(RegexExpressions.SearchInterpolation).test(text);
+    public isExistInterpolation = (text: string): boolean => RegexExpressions.SearchInterpolation.test(text);
 
     public getPickedEntities = (embeddedFields: embedded): PickedEntities => {
         const pickedEntity: PickedEntities = {};

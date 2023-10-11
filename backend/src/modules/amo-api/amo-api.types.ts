@@ -272,3 +272,70 @@ export type CreatedNote = {
     request_id?: string;
     is_need_to_trigger_digital_pipeline?: boolean;
 };
+
+export type UnsortedLead = {
+    uid: string;
+    source_uid: null;
+    source_name: string;
+    category: string;
+    pipeline_id: number;
+    created_at: number;
+    metadata: {
+        from: string;
+        phone: number;
+        called_at: number;
+        duration: string;
+        link: string | null;
+        service_code: string;
+    };
+    account_id: number;
+    _links: {
+        self: {
+            href: string;
+        };
+    };
+    _embedded: {
+        contacts: [
+            {
+                id: number;
+                _links: {
+                    self: {
+                        href: string;
+                    };
+                };
+            },
+        ];
+        leads: [
+            {
+                id: number;
+                _links: {
+                    self: {
+                        href: string;
+                    };
+                };
+            },
+        ];
+        companies: [
+            {
+                id: number;
+                _links: {
+                    self: {
+                        href: string;
+                    };
+                };
+            },
+        ];
+    };
+};
+
+export type UnsortedData = {
+    _page: number;
+    _links: {
+        self: {
+            href: string;
+        };
+    };
+    _embedded: {
+        unsorted: UnsortedLead[];
+    };
+};

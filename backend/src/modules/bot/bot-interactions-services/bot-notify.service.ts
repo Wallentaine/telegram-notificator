@@ -4,9 +4,9 @@ import { MarlboroLoggerService } from '../../../core/marlboro-logger/marlboro-lo
 import { ConfigService } from '@nestjs/config';
 import { ReceivedMessageData } from '../types/received-message.data';
 import { MessageSettings } from '../types/message-settings.types';
-import { CustomInlineKeyboard } from '../types/custom-inline-keyboard.types';
 import { BotSubscriberMessage } from '../bot.subscriber-message.model';
 import { BotSubscriberMessageRepository } from '../bot.subscriber-message.repository';
+import { generateKeyboardByMessageSettings } from '../helpers/generate-keyboard.helper';
 
 type TelegrafContext = Scenes.SceneContext;
 
@@ -21,6 +21,7 @@ export class BotNotifyService extends Telegraf<TelegrafContext> {
     }
 
     async sendMessage(
+        accountId: number,
         subscriber: number,
         boundLeadId: number,
         messageData: ReceivedMessageData,
@@ -29,29 +30,13 @@ export class BotNotifyService extends Telegraf<TelegrafContext> {
         const loggerContext = `${BotNotifyService.name}/${this.sendMessage.name}`;
 
         try {
-            const keyboard: CustomInlineKeyboard[][] = [];
-
-            if (hookSettings.requiredFillFields) {
-                keyboard.push([Markup.button.callback('Заполнить поля', 'field-fill')]);
-            }
-
-            if (hookSettings.requiredSwapStage) {
-                keyboard.push([Markup.button.callback('Смена этапа', 'swap-stage')]);
-            }
-
-            if (hookSettings.isUnsortedPipelineStage) {
-                keyboard.push([
-                    Markup.button.callback('Принять', 'accept-unsorted-deal'),
-                    Markup.button.callback('Отклонить', 'reject-unsorted-deal'),
-                ]);
-            }
-
             const sentMessage = await this.telegram.sendMessage(subscriber, messageData.preparedMessage, {
                 parse_mode: 'HTML',
-                ...Markup.inlineKeyboard(keyboard),
+                ...Markup.inlineKeyboard(generateKeyboardByMessageSettings(hookSettings)),
             });
 
             const newSubscriberMessage: BotSubscriberMessage = {
+                accountId,
                 subscriberId: subscriber,
                 messageId: sentMessage.message_id,
                 boundLeadId,
@@ -60,8 +45,6 @@ export class BotNotifyService extends Telegraf<TelegrafContext> {
             };
 
             await this.subscriberMessageRepository.addSubscriberMessage(newSubscriberMessage);
-
-            console.log(await this.subscriberMessageRepository.getSubscriberMessage(subscriber, sentMessage.message_id));
         } catch (error) {
             this.logger.error(error, loggerContext);
         }

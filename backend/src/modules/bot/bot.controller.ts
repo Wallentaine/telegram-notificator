@@ -7,7 +7,9 @@ import { MarlboroLoggerService } from '../../core/marlboro-logger/marlboro-logge
 import { DigitalPipelineHookDto } from './dto/digital-pipeline-hook.dto';
 import { UpdateTelegramUsersDto } from './dto/update-telegram-users.dto';
 import { ValidateDtoPipe } from '../../core/pipes/validation.pipe';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Работа с ботом')
 @Controller(Endpoints.Bot.Base)
 export class BotController {
     constructor(
@@ -15,6 +17,8 @@ export class BotController {
         private readonly logger: MarlboroLoggerService
     ) {}
 
+    @ApiOperation({ summary: 'Отправка сообщения пользователю' })
+    @ApiResponse({ status: HttpStatus.OK })
     @UsePipes(ValidateDtoPipe)
     @Post(Endpoints.Bot.Notify)
     public async notify(@Body(new ValidationPipe({ transform: true })) dto: DigitalPipelineHookDto) {
@@ -28,6 +32,7 @@ export class BotController {
         }
     }
 
+    @ApiOperation({ summary: 'Получение привязанных телеграм пользователей' })
     @Get(Endpoints.Bot.TelegramUsers)
     public async getTelegramUsers(@Query() dto: GetTelegramUsersDto): Promise<TelegramUser[]> {
         const loggerContext = `${BotController.name}/${this.getTelegramUsers.name}`;

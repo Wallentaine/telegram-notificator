@@ -34,4 +34,26 @@ export class BotSubscriberMessageRepository {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public async updateSubscriberMessage(subscriberMessage: BotSubscriberMessageDocument): Promise<void> {
+        const loggerContext = `${BotSubscriberMessageRepository.name}/${this.updateSubscriberMessage.name}`;
+
+        try {
+            await subscriberMessage.save();
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public async deleteSubscriberMessage(subscriberMessage: BotSubscriberMessageDocument): Promise<void> {
+        const loggerContext = `${BotSubscriberMessageRepository.name}/${this.deleteSubscriberMessage.name}`;
+
+        try {
+            await subscriberMessage.deleteOne();
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -76,16 +76,16 @@ export class BotService extends Telegraf<TelegrafContext> {
                 preparedMessage: null,
             };
 
-            if (interpolation.isExistInterpolation(hookMessageData.receivedMessage)) {
+            hookMessageData.preparedMessage = hookMessageData.receivedMessage.replace(RegexExpressions.SearchEnter, '\n');
+
+            if (interpolation.isExistInterpolation(hookMessageData.preparedMessage)) {
                 hookMessageData.preparedMessage = interpolation.interpolateText(
-                    hookMessageData.receivedMessage,
+                    hookMessageData.preparedMessage,
                     boundLeadWithEntities.lead,
                     boundLeadWithEntities.contact,
                     boundLeadWithEntities.company
                 );
             }
-
-            hookMessageData.preparedMessage = hookMessageData.receivedMessage.replace(RegexExpressions.SearchEnter, '\n');
 
             const subscribers = hook.action.settings.widget.settings.subscribers;
 
@@ -95,7 +95,7 @@ export class BotService extends Telegraf<TelegrafContext> {
                 requiredFillFields: receivedHookSettings.requiredFillFields,
                 requestFillFields: receivedHookSettings.requestFillFields,
                 requiredUnsortedDescription: receivedHookSettings.requiredUnsortedDescription,
-                isUnsortedPipelineStage: false,
+                isUnsortedPipelineStage: true,
             };
 
             if (hookSettingsData.requiredUnsortedDescription) {
@@ -113,7 +113,13 @@ export class BotService extends Telegraf<TelegrafContext> {
             }
 
             for (const subscriber of subscribers) {
-                await this.notifyService.sendMessage(subscriber, boundLeadWithEntities.lead.id, hookMessageData, hookSettingsData);
+                await this.notifyService.sendMessage(
+                    appAccount.id,
+                    subscriber,
+                    boundLeadWithEntities.lead.id,
+                    hookMessageData,
+                    hookSettingsData
+                );
             }
 
             this.logger.info(`All messages send account => ${appAccount.id}, subscribers => ${subscribers.join(', ')}`, loggerContext);

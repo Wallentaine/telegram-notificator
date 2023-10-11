@@ -8,6 +8,9 @@ export type BotSubscriberMessageDocument = HydratedDocument<BotSubscriberMessage
 @Schema()
 export class BotSubscriberMessage {
     @Prop({ required: true })
+    public accountId: number;
+
+    @Prop({ required: true })
     public subscriberId: number;
 
     @Prop({ required: true })

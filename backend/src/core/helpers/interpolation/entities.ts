@@ -6,7 +6,7 @@ import { Company } from './types/amo-types/companies/company';
 const lead = {
     [BaseFieldsNames.Lead.Id]: (lead: LeadData) => lead.id,
     [BaseFieldsNames.Lead.Name]: (lead: LeadData) => lead.name,
-    [BaseFieldsNames.Lead.Price]: (lead: LeadData) => lead.price,
+    [BaseFieldsNames.Lead.Price]: (lead: LeadData) => lead.price || '0',
 };
 
 const contact = {

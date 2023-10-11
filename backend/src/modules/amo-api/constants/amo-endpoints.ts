@@ -1,6 +1,9 @@
 export const AmoEndPoints = {
     Leads: {
         Base: 'leads',
+        Unsorted: 'unsorted',
+        UnsortedAccept: 'accept',
+        UnsortedReject: 'decline',
     },
     Contacts: {
         Base: 'contacts',

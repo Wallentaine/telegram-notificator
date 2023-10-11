@@ -19,6 +19,7 @@ import { AmoApiModule } from '../amo-api/amo-api.module';
 import { BotNotifyService } from './bot-interactions-services/bot-notify.service';
 import { BotSubscriberMessageRepository } from './bot.subscriber-message.repository';
 import { BotSubscriberMessage, BotSubscriberMessageSchema } from './bot.subscriber-message.model';
+import { BotUnsortedActionsService } from './bot-interactions-services/bot-unsorted-actions.service';
 
 @Module({
     imports: [
@@ -44,6 +45,7 @@ import { BotSubscriberMessage, BotSubscriberMessageSchema } from './bot.subscrib
         BotTextService,
         BotNotifyService,
         BotChatMigrateService,
+        BotUnsortedActionsService,
         MarlboroLoggerService,
         AccountRepository,
         BotSubscriberMessageRepository,
