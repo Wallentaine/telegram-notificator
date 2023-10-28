@@ -1,0 +1,86 @@
+.select {
+    position: relative;
+    border: 1px solid var(--main-border-color);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+
+    &__title {
+        display: block;
+        cursor: pointer;
+        padding: 6px 25px 6px 10px;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__arrow {
+        position: absolute;
+        top: calc(50% - 5px);
+        width: 6px;
+        height: 6px;
+        border-bottom: 1px solid var(--main-text-color);
+        border-right: 1px solid var(--main-text-color);
+        transform: rotate(45deg);
+        right: 10px;
+        z-index: 10;
+    }
+
+    &__list {
+        position: absolute;
+        right: -1px;
+        top: -1px;
+        list-style: none;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        width: calc(100% + 10px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: var(--main-bg-color);
+        border: 1px solid var(--main-border-color);
+        max-height: 150px;
+
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: var(--main-scroll-truck-color);
+            border-radius: 5px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--main-scroll-thumb-color);
+            border-radius: 5px;
+        }
+
+        &._active {
+            z-index: 30;
+            pointer-events: all;
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    &__option {
+        display: block;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 5px 10px 5px 18px;
+
+        &:hover {
+            background-color: var(--main-border-color);
+        }
+
+        &._selected {
+            background: var(--main-bg-color) var(--icon-select-check-mark) 5px 11px no-repeat;
+        }
+
+        &._selected:hover {
+            background: var(--main-border-color) var(--icon-select-check-mark) 5px 11px no-repeat;
+        }
+    }
+}

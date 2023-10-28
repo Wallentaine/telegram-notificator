@@ -1,0 +1,131 @@
+@mixin scrollbar($radius: 0px) {
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: var(--main-scroll-truck-color);
+        border-radius: $radius;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--main-scroll-thumb-color);
+        border-radius: $radius;
+    }
+}
+
+.dp-settings {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    overflow: auto;
+    padding: 0 8px;
+    max-height: 500px;
+
+    @include scrollbar(5px);
+
+    &__row {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+    }
+
+    &__item-title {
+
+        &_task-duration {
+            width: 95px;
+        }
+    }
+
+    &__item-input {
+
+        &_task-duration {
+            width: calc((100% - 95px - 10px)/2);
+        }
+
+        &_task-deadline {
+            width: calc((100% - 20px)/3);
+        }
+    }
+
+    &__textarea {
+        display: block;
+        width: 100%;
+        height: 120px;
+        min-height: 120px;
+        flex: 0 0 120px;
+        resize: none;
+        padding: 8px 9px 7px;
+        border: 1px solid var(--main-border-color);
+        border-radius: 3px;
+        background-color: var(--main-bg-color);
+        outline: 0;
+
+        &::placeholder {
+            color: var(--main-placeholder-color);
+        }
+
+        @include scrollbar;
+    }
+
+    &__vars-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: 4px 5px;
+        padding: 10px;
+        overflow: hidden auto;
+        border: 1px solid var(--main-border-color);
+        width: 100%;
+        height: 120px;
+        min-height: 120px;
+        flex: 0 0 120px;
+
+        @include scrollbar;
+
+        span {
+            cursor: pointer;
+            display: block;
+            padding: 4px 8px;
+            border-radius: 10px;
+            background-color: #1c93e3;
+            color: #ececec;
+        }
+    }
+
+    &__input-block {
+        margin: 6px 0;
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+
+    &__check-once {
+        background: #eeefff;
+        padding: 4px;
+    }
+
+    &__input-header {
+        font-weight: bold;
+    }
+
+    &__buttons-group {
+        display: flex;
+    }
+}
+
+._text-warning {
+    color: var(--main-warning-color);
+}
+
+button._disabled {
+    background-color: var(--main-border-color);
+    border-color: var(--main-border-color);
+    cursor: not-allowed;
+    opacity: 0.6;
+
+    &:hover {
+        background-color: var(--main-border-color);
+        border-color: var(--main-border-color);
+    }
+}

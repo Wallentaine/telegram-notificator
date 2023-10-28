@@ -1,0 +1,15 @@
+.connect-telegram-wrapper {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+
+    &__btns {
+        margin-top: 18px;
+        display: flex;
+        flex-direction: row;
+    }
+    &__btns a {
+        text-decoration: none;
+        color: inherit;
+    }
+}

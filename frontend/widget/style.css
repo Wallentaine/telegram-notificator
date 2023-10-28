@@ -1,0 +1,564 @@
+/*
+    стили для окна в digital-pipeline
+*/
+
+.reon-smart_tasks-widget__button-fields-wrapper {
+    width: 100%;
+    height: 120px;
+    border: 1px solid #dbdedf;
+    margin-top: 10px;
+    overflow-y: auto;
+}
+
+.reon-smart_tasks-widget__add-field-button {
+    margin: 3px 3px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: #1c93e3;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.reon-smart_tasks-widget__add-field-button:hover {
+    background-color: #177ec4;
+}
+
+.reon-smart_tasks-widget__search-fields-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.reon-smart_tasks-widget__search-fields-reset {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.reon-smart_tasks-widget__search-fields-reset::before,
+.reon-smart_tasks-widget__search-fields-reset::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background-color: #dbdedf;
+    left: 50%;
+    top: 0;
+}
+
+.reon-smart_tasks-widget__search-fields-reset::before {
+    rotate: 45deg;
+}
+
+.reon-smart_tasks-widget__search-fields-reset::after {
+    rotate: -45deg;
+}
+
+.reon-smart_tasks-widget__search-fields-reset:hover::before,
+.reon-smart_tasks-widget__search-fields-reset:hover::after {
+    background-color: red;
+}
+
+.reon-smart_tasks-widget__settings-fields-type-dp-title {
+    display: block;
+    margin: 24px 0 7px;
+}
+
+.reon-smart_tasks-widget__settings-fields-type-dp-select {
+    margin-bottom: 5px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.h-text-overflow {
+    display: block;
+}
+
+.reon-smart_tasks-widget__settings-fields-wrapper {
+    margin: 10px 0 0;
+    display: flex;
+    gap: 0 10px;
+    align-items: center;
+}
+
+.reon-smart_tasks-widget__custom-input {
+    display: block;
+    width: 100%;
+}
+
+.reon-task__input-time {
+    min-width: 22%;
+    max-width: 50%;
+}
+
+.period-execution {
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.144);
+}
+
+.task_type_select__icon {
+    margin: 0 3px 0 15px;
+    display: inline-block;
+}
+
+.reon-smart_tasks-widget__text-duration-select-text {
+    font-size: 14px;
+}
+
+/*-----------------------------------------------------------------------Seleck type tusk------------------------------------------------*/
+.reon-smart-task__advanced-settings-subtitle,
+.reon-smart-task__advanced-settings-text {
+    color: rgba(0, 0, 0, 0.356);
+    padding: 0;
+    margin: 0;
+}
+
+.reon-smart-task__advanced-settings-text {
+    margin: 3px 0 0;
+}
+
+.reon-smart-task__button-add-conditions {
+    margin: 15px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 35px;
+    width: 140px;
+    background: transparent;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.349);
+    cursor: pointer;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.reon-smart-task__button-save-advanced-settings {
+    position: absolute;
+    z-index: 100;
+    top: 13px;
+    right: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 38px;
+    width: 140px;
+    color: #ffffff;
+    border-radius: 7px;
+    background: #4c8bf7;
+    border: 1px solid #4077d6;
+    cursor: pointer;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.reon-smart-task__form-container {
+    display: grid;
+    grid-template-columns: 0.7fr 1fr;
+    max-width: 900px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0 0 0;
+    box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 34%);
+}
+
+.reon-smart-task__advanced-funnel-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.reon-smart-task__form-button-delete {
+    margin: auto 0 0;
+    align-self: start;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.reon-smart-task__advanced-task-wrapper {
+    padding: 0 0 0 25px;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.reon-smart-task-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    resize: none;
+    height: 100px;
+    margin: 0;
+    padding: 10px;
+    outline: 0;
+    border: 1px solid rgba(0, 0, 0, 0.459);
+}
+
+.reon-smart-task__duration-title {
+    margin: 0 0 10px;
+}
+
+/*-----------------------------------------------------------------------Seleck type tusk------------------------------------------------*/
+.select-deadline::before {
+    content: "Дедлайна по:";
+    padding-right: 7px;
+}
+
+.select-date-time-deadline::before {
+    content: "Дата и время дедлайна:";
+    padding-right: 7px;
+}
+
+.select-date-deadline::before {
+    content: "Дата дедлайна:";
+    padding-right: 7px;
+}
+
+.select-time-deadline::before {
+    content: "Время дедлайна:";
+    padding-right: 7px;
+}
+
+.select-curent-responseble::before {
+    content: "Для:";
+    padding-right: 7px;
+}
+
+.select-type-task::before {
+    content: "Тип задачи:";
+    padding-right: 7px;
+}
+
+.reon-smart-task__select-wrapper,
+.reon__select-wrapper {
+    display: flex;
+    width: 100%;
+    max-height: 36px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.reon-smart-task__deadline-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px 10px;
+}
+
+.reon-smart-task__deadline-input-container {
+    display: flex;
+    font-size: 16px;
+    gap: 5px 10px;
+    align-items: center;
+}
+
+.reon-smart-task__deadline-date-title {
+    margin: 0 auto 0 0;
+}
+
+.reon-smart-task__sub-input {
+    min-height: 34px;
+    max-width: 100px;
+    padding: 0 5px;
+    border: 1px solid rgba(0, 0, 0, 0.199);
+    border-radius: 3px;
+}
+
+.reon-smart-task__inputs-duration-task {
+    display: flex;
+    gap: 0 10px;
+    align-items: center;
+    white-space: nowrap;
+    margin: 0 0 7px;
+}
+
+.reon-smart-task-widget__select-list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0 0 0 0;
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.199);
+    border-radius: 3px;
+    list-style: none;
+    z-index: 3;
+    width: 100%;
+    display: none;
+    max-height: 250px;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 50%);
+    -webkit-overflow-scrolling: touch;
+}
+
+.reon-smart-task-widget__select-item {
+    background-color: rgb(255, 255, 255);
+    padding: 8px 0px 8px 25px;
+    box-sizing: border-box;
+    display: flex;
+}
+.reon-smart-task-widget__select-item:hover {
+    background-color: rgb(242,242,242);
+}
+.reon-smart-task-widget__select-button-icon {
+    display: flex;
+    align-items: center;
+    padding-right: 3px;
+}
+
+.reon-smart-task-widget__select-item-icon:first-child {
+    display: flex;
+    align-items: center;
+    margin: 0 0 0 5px;
+}
+
+.reon-smart-task-widget__select-item-text {
+    padding: 0 0 0 5px; 
+}
+
+.item-selected {
+    background-color: rgb(242,242,242);
+    padding: 8px 0px 8px 10px;
+}
+
+.item-selected::before {
+    content: "\2714";
+    font-size: 14px;
+}
+
+.reon-smart-task-widget__select-button {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    flex: 1 1 100%;
+    border: 1px solid rgba(0, 0, 0, 0.192);
+    border-radius: 3px;
+    padding: 7px 0 5px 10px;
+    text-align: start;
+    cursor: pointer;
+}
+
+.reon-smart-task-widget__select-button::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 5px);
+    width: 6px;
+    height: 6px;
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+    transform: rotate(45deg);
+    margin-left: 7px;
+    right: 12px;
+    z-index: 1;
+}
+
+/*==============================================================================================*/
+.reon-smart-task__multi-select-pipeline {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+    min-height: 34px;
+    border: 1px solid rgba(0, 0, 0, 0.192);
+    border-radius: 3px;
+    padding: 0 10px;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.reon-smart-task__before-false::before {
+    content: "Воронки, Этапы";
+    color: rgba(0, 0, 0, 0.349);
+}
+
+.reon-smart-task__before-true::before {
+    content: "Активные статусы";
+    color: rgba(0, 0, 0, 0.349);
+}
+
+.pipeline-multiselect-wrapper {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-height: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.253);
+}
+
+.pipeline-multiselect-wrapper:not(:last-child) {
+    border-bottom: none;
+}
+
+.reon-smart-task__multi-select-pipeline-wrapper {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    background-color: #eeeeee;
+}
+
+.reon-smart-task___input-radio-input {
+    display: none;
+}
+
+.reon-smart-task__pipeline-select-text {
+    min-width: 93%;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.reon-smart-task__pipeline-select-list-item {
+    display: flex;
+    align-items: center;
+}
+
+.reon-smart-task__multiselect-enum {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    min-width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0 0 0 5px;
+}
+
+.reon-smart-task__multiselect-sub-enum {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    min-width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.reon-smart-task__pipeline-select-list {
+    display: none;
+    list-style: none;
+}
+
+.reon-smart-task__checkbox-all-helper {
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.reon-smart-task__button-tabs {
+    cursor: pointer;
+    flex: 0 0 150px;
+    min-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(51, 51, 51, 0.295);
+    border-radius: 5px;
+    background: #f5f5f5;
+}
+
+.reon-smart-task__button-tabs:not(:first-child) {
+    margin: 0 0 0 -10px;
+}
+
+.reon-smart-task__button-tabs:hover {
+    background-color: #dbdedf;
+}
+
+.reon-smart-task__tabs-container {
+    display: flex;
+    gap: 0 10px;
+    margin: 15px 0 0;
+    min-height: 42px;
+    max-width: 930px;
+    overflow: hidden;
+}
+
+.reon-smart-task__tabs-button-carousel {
+    flex: 1 1 auto;
+    max-width: 830px;
+    overflow: hidden;
+    position: relative;
+}
+
+.reon-smart-task__button-slider {
+    z-index: 1;
+    font-size: 28px;
+    padding: 0 15px 0;
+    background: #4c8bf7;
+    border: 1px solid #4077d6;
+    border-radius: 50%;
+    display: flex;
+    width: 44px;
+    height: 42px;
+}
+
+.reon-smart-task__tabs-button-container {
+    position: absolute;
+    transition: all 0.5s linear;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: flex-start;
+    min-width: 100%;
+    z-index: 2;
+}
+
+.reon-smart-task__tabs-button-right {
+}
+
+.reon-smart-task__tabs-input {
+    display: none;
+}
+
+.reon-smart-task__button-active {
+    background-color: #dbdedf;
+    border: 1px solid #dbdedf;
+    z-index: 2;
+}
+
+.visibl {
+    display: block;
+    z-index: 10;
+}
+
+.reon-smart-task__visible-element {
+    display: block;
+}
+.reon-smart-tasks__form-task-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+    max-height: 700px;
+    overflow: auto;
+    padding: 0 8px 0 8px;
+}
+.reon-smart_tasks-widget__settings-data-time-wrapper,
+.reon-smart_tasks-widget__settings-data-wrapper {
+    margin: 10px 0 0;
+    display: flex;
+    gap: 0 10px;
+    align-items: center;
+}
+.reon-smart-task__title-field {
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+.reon-smart-task__title-field-adjustment-deadline {
+    margin: 7px 0 7px;
+}
+.reon-task__error-messages {
+    color: red;
+    margin-top: 5px;
+}

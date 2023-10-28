@@ -20,6 +20,10 @@ import { BotNotifyService } from './bot-interactions-services/bot-notify.service
 import { BotSubscriberMessageRepository } from './bot.subscriber-message.repository';
 import { BotSubscriberMessage, BotSubscriberMessageSchema } from './bot.subscriber-message.model';
 import { BotUnsortedActionsService } from './bot-interactions-services/bot-unsorted-actions.service';
+import { FillFieldWizardScene } from './scenes/wizard/fill-field/fill-field.wizard-scene';
+import { BotFillFieldActionService } from './bot-interactions-services/bot-fill-field-actions.service';
+import { SwapStageWizardScene } from './scenes/wizard/swap-stage/swap-stage.wizard-scene';
+import { BotSwapStageActionsService } from './bot-interactions-services/bot-swap-stage-actions.service';
 
 @Module({
     imports: [
@@ -46,6 +50,10 @@ import { BotUnsortedActionsService } from './bot-interactions-services/bot-unsor
         BotNotifyService,
         BotChatMigrateService,
         BotUnsortedActionsService,
+        BotFillFieldActionService,
+        BotSwapStageActionsService,
+        FillFieldWizardScene,
+        SwapStageWizardScene,
         MarlboroLoggerService,
         AccountRepository,
         BotSubscriberMessageRepository,

@@ -1,0 +1,101 @@
+{
+  "widget": {
+    "name": "widget.name",
+    "description": "widget.description",
+    "short_description": "widget.short_description",
+    "version": "1.0.17",
+    "interface_version": 2,
+    "init_once": true,
+    "locale": ["ru"],
+    "installation": true,
+    "is_showcase": false,
+    "support": {
+      "link": "https://www.amocrm.com",
+      "email": "reon.helpdesk@gmail.com"
+    }
+  },
+  "locations": ["settings", "digital_pipeline", "advanced_settings"],
+  "tour": {
+    "is_tour": true,
+    "tour_images": {
+      "ru": ["/images/logo_main.png"]
+    },
+    "tour_description": "widget.tour_description"
+  },
+  "settings": {
+    "client_name": {
+      "name": "settings.client_name",
+      "type": "text",
+      "required": true
+    },
+    "phone_number": {
+      "name": "settings.phone_number",
+      "type": "text",
+      "required": true
+    },
+    "terms_of_use": {
+      "name": "settings.terms_of_use",
+      "type": "text",
+      "required": true
+    }
+  },
+  "advanced": {
+    "title": "advanced.title"
+  },
+  "dp": {
+    "settings": {
+      "formTaskSystem": {
+        "name": "dp.formTaskSystem",
+        "type": "text",
+        "required": true
+      },
+      "subscribers": {
+        "name": "dp.subscribers",
+        "type": "text",
+        "required": true
+      },
+      "message": {
+        "name": "dp.message",
+        "type": "text",
+        "required": true
+      },
+      "requiredSwapStage": {
+        "name": "dp.requiredSwapStage",
+        "type": "text",
+        "required": false
+      },
+      "requestSwapStage": {
+        "name": "dp.requestSwapStage",
+        "type": "text",
+        "required": false
+      },
+      "requiredSwapStageOnce": {
+        "name": "dp.requestSwapStageOnce",
+        "type": "text",
+        "required": false
+      },
+      "requiredFillFields": {
+        "name": "dp.requiredFillFields",
+        "type": "text",
+        "required": false
+      },
+      "requestFillFields": {
+        "name": "dp.requestFillFields",
+        "type": "text",
+        "required": false
+      },
+      "requiredFillFieldsOnce": {
+        "name": "dp.requestFillFieldsOnce",
+        "type": "text",
+        "required": false
+      },
+      "requiredDescription": {
+        "name": "dp.requiredDescription",
+        "type": "text",
+        "required": false
+      }
+    },
+    "action_multiple": false,
+    "webhook_url": "https://07e2-77-95-92-110.ngrok-free.app/tg-bot/bot/notify"
+  }
+}

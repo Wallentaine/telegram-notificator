@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Endpoints } from '../../core/consts/endpoints';
 import { BotService } from './bot.service';
 import { GetTelegramUsersDto } from './dto/get-telegram-users.dto';
@@ -46,11 +46,23 @@ export class BotController {
     }
 
     @Put(Endpoints.Bot.TelegramUsers)
-    public async updateTelegramUsers(@Body('accountId') accountId: number, @Body('users') users: UpdateTelegramUsersDto[]) {
+    public async updateTelegramUsers(@Body('accountId') accountId: number, @Body('user') user: UpdateTelegramUsersDto) {
         const loggerContext = `${BotController.name}/${this.updateTelegramUsers.name}`;
 
         try {
-            await this.botService.updateTelegramUsers(accountId, users);
+            await this.botService.updateTelegramUser(accountId, user);
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Delete(Endpoints.Bot.TelegramUsers)
+    public async deleteTelegramUser(@Body('accountId') accountId: number, @Body('user') user: UpdateTelegramUsersDto): Promise<void> {
+        const loggerContext = `${BotController.name}/${this.deleteTelegramUser.name}`;
+
+        try {
+            await this.botService.deleteTelegramUser(accountId, user);
         } catch (error) {
             this.logger.error(error, loggerContext);
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

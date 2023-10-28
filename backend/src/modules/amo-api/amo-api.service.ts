@@ -225,18 +225,14 @@ export class AmoApiService {
     public async getNotesByLeadId({ accountId, token }: AuthQueryDto, leadId: number): Promise<Note[]> {
         const accountInfo = await this.getAccountInfo({ accountId, token });
 
-        const {
-            data: {
-                _embedded: { notes },
-            },
-        } = await this.apiRequest<NoteList>(
+        const { data: response } = await this.apiRequest<NoteList>(
             accountInfo.subdomain,
             token,
             RequestTypes.Get,
             `${AmoEndPoints.Leads.Base}/${leadId}/${AmoEndPoints.Notes.Base}`
         );
 
-        return notes;
+        return response?._embedded?.notes || [];
     }
 
     @UseTokenAuthorization()

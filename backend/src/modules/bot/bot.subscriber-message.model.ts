@@ -32,9 +32,15 @@ export class BotSubscriberMessage {
         required: true,
         type: Object({
             requiredSwapStage: Boolean,
-            requestSwapStage: String,
+            requestSwapStage: Array({
+                stageId: Number,
+                stageName: String,
+            }),
             requiredFillFields: Boolean,
-            requestFillFields: String,
+            requestFillFields: Array({
+                fieldId: String,
+                fieldName: String,
+            }),
             isUnsortedPipelineStage: Boolean,
         }),
     })

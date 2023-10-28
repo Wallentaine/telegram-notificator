@@ -18,7 +18,7 @@ import { BoundLead } from './types/bound-lead.types';
 
 type TelegrafContext = Scenes.SceneContext;
 
-const COUNT_NOTES_FOR_SEND = 3;
+const COUNT_NOTES_FOR_SEND = 1;
 
 @Injectable()
 export class BotService extends Telegraf<TelegrafContext> {
@@ -32,7 +32,7 @@ export class BotService extends Telegraf<TelegrafContext> {
         super(configService.get('BOT_TOKEN'));
     }
 
-    public async notify(hook: DigitalPipelineHookDto) {
+    public async notify(hook: DigitalPipelineHookDto): Promise<void | HttpException> {
         const loggerContext = `${BotService.name}/${this.notify.name}`;
 
         try {
@@ -94,22 +94,24 @@ export class BotService extends Telegraf<TelegrafContext> {
                 requestSwapStage: receivedHookSettings.requestSwapStage,
                 requiredFillFields: receivedHookSettings.requiredFillFields,
                 requestFillFields: receivedHookSettings.requestFillFields,
-                requiredUnsortedDescription: receivedHookSettings.requiredUnsortedDescription,
-                isUnsortedPipelineStage: true,
+                requiredDescription: receivedHookSettings.requiredDescription,
+                isUnsortedPipelineStage: false,
             };
 
-            if (hookSettingsData.requiredUnsortedDescription) {
+            if (hookSettingsData.requiredDescription) {
                 const notes = await this.amoApiService.getNotesByLeadId(accessInformation, leadId);
 
-                const filteredNotesByText = notes.filter((note) => note.note_type === NoteTypes.Common && 'text' in note?.params);
+                if (notes.length) {
+                    const filteredNotesByText = notes.filter((note) => note.note_type === NoteTypes.Common && 'text' in note?.params);
 
-                hookMessageData.preparedMessage += filteredNotesByText?.length && '\n\n' + 'Примечания:' + '\n';
+                    hookMessageData.preparedMessage += filteredNotesByText?.length && '\n\n' + 'Примечания:' + '\n';
 
-                filteredNotesByText.length > COUNT_NOTES_FOR_SEND && filteredNotesByText.splice(-COUNT_NOTES_FOR_SEND);
+                    filteredNotesByText.length > COUNT_NOTES_FOR_SEND && filteredNotesByText.splice(-COUNT_NOTES_FOR_SEND);
 
-                filteredNotesByText.forEach((note) => {
-                    hookMessageData.preparedMessage += 'text' in note?.params && note.params.text + '\n';
-                });
+                    filteredNotesByText.forEach((note) => {
+                        hookMessageData.preparedMessage += 'text' in note?.params && note.params.text + '\n';
+                    });
+                }
             }
 
             for (const subscriber of subscribers) {
@@ -140,8 +142,8 @@ export class BotService extends Telegraf<TelegrafContext> {
         }
     }
 
-    public async updateTelegramUsers(accountId: number, users: UpdateTelegramUsersDto[]) {
-        const loggerContext = `${BotService.name}/${this.updateTelegramUsers.name}`;
+    public async updateTelegramUser(accountId: number, user: UpdateTelegramUsersDto): Promise<void | HttpException> {
+        const loggerContext = `${BotService.name}/${this.updateTelegramUser.name}`;
 
         const appAccount = await this.accountRepository.getAccountById(accountId);
 
@@ -151,34 +153,43 @@ export class BotService extends Telegraf<TelegrafContext> {
         }
 
         try {
-            for (const user of users) {
-                if (
-                    !appAccount.telegramUsers.find((telegramUser) => telegramUser.telegramId === user.telegramId) &&
-                    user.action in ['deleted', 'edit']
-                ) {
-                    this.logger.error(`User with id => ${user.telegramId} and name => ${user.telegramUserName} not found`, loggerContext);
-                    continue;
-                }
+            await this.accountRepository.updateTelegramUser(appAccount, {
+                telegramId: user.telegramId,
+                telegramUserName: user.telegramUserName,
+                amoUserId: user.amoUserId || null,
+                amoUserName: user.amoUserName || null,
+            });
+        } catch (error) {
+            this.logger.error(error, loggerContext);
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-                const userWithoutActions: TelegramUser = {
-                    telegramId: user.telegramId,
-                    telegramUserName: user.telegramUserName,
-                    amoUserId: user.amoUserId || null,
-                    amoUserName: user.amoUserName || null,
-                };
+    public async deleteTelegramUser(accountId: number, user: UpdateTelegramUsersDto): Promise<void | HttpException> {
+        const loggerContext = `${BotService.name}/${this.deleteTelegramUser.name}`;
 
-                switch (user.action) {
-                    case 'deleted':
-                        await this.accountRepository.deleteTelegramUser(appAccount, userWithoutActions);
-                        break;
-                    case 'create':
-                        await this.accountRepository.addTelegramUser(appAccount, userWithoutActions);
-                        break;
-                    case 'edit':
-                        await this.accountRepository.updateTelegramUser(appAccount, userWithoutActions);
-                        break;
-                }
+        const appAccount = await this.accountRepository.getAccountById(accountId);
+
+        if (!appAccount) {
+            this.logger.error('Account not found', loggerContext);
+            return new HttpException('Account not found!', HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            if (!appAccount.telegramUsers.find((telegramUser) => telegramUser.telegramId === user.telegramId)) {
+                this.logger.error(`User with id => ${user.telegramId} and name => ${user.telegramUserName} not found`, loggerContext);
+                return new HttpException(
+                    `User with id => ${user.telegramId} and name => ${user.telegramUserName} not found`,
+                    HttpStatus.NOT_FOUND
+                );
             }
+
+            await this.accountRepository.deleteTelegramUser(appAccount, {
+                telegramId: user.telegramId,
+                telegramUserName: user.telegramUserName,
+                amoUserId: user.amoUserId || null,
+                amoUserName: user.amoUserName || null,
+            });
         } catch (error) {
             this.logger.error(error, loggerContext);
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

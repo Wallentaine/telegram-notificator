@@ -1,0 +1,94 @@
+.reon-plan-sales-payment-display-container {
+    width: 100%;
+    height: 100%;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+}
+
+.reon_widget_settings_body_item {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.reon_widget_settings_row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.reon_widget_settings_forwardToContact {
+    padding: 10px;
+    border: 1px solid #dedee0;
+    color: #737373;
+    font-size: 14px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.reon_widget_settings_price {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0 10px 0;
+}
+
+.reon_widget_settings_price_body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 10px 0 15px 0;
+}
+
+.reon_widget_ai_modal_text {
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: #f37575;
+}
+.reon_widget_ai_modal_text.paid {
+    color: #75f375;
+}
+
+.reon_widget_settings_price_item {
+    width: 100%;
+    border-radius: 3px;
+    padding: 10px 0;
+    background: var(--bg-color);
+    cursor: pointer;
+
+    &:hover:not(._active) {
+        filter: brightness(95%);
+    }
+
+    &._active {
+        background: #4d85e6;
+        color: #ececec;
+    }
+}
+
+.reon_widget_settings_price_item_title {
+    font-size: 14px;
+    margin: 0 0 5px 0;
+    padding: 0 10px;
+}
+
+.reon_widget_settings_price_item_body {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.reon_widget_settings_price_period {
+    font-size: 17px;
+}
+
+.reon_widget_settings_price_value {
+    font-size: 15px;
+}

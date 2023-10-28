@@ -1,0 +1,26 @@
+:root {
+    --main-bg-color: #fff;
+    --main-border-color: #c5c5c5;
+    --main-text-color: #363b44;
+    --main-placeholder-color: #9a9b9c;
+    --main-scroll-truck-color: #e2e2e2;
+    --main-scroll-thumb-color: #c5c5c5;
+    --main-warning-color: #eb3737;
+}
+
+:root[data-color-scheme='dark'] {
+    --main-bg-color: #153043;
+    --main-border-color: #284860;
+    --main-text-color: #ced5d8;
+    --main-placeholder-color: #98a9b5;
+    --main-scroll-truck-color: #122838;
+    --main-scroll-thumb-color: #284860;
+}
+
+#reon-task-widget * {
+    box-sizing: border-box;
+}
+#reon-task-widget {
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}

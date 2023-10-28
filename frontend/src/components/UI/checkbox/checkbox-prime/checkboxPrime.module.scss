@@ -1,0 +1,28 @@
+.checkbox {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    width: fit-content;
+    cursor: pointer;
+
+    &__btn {
+        display: block;
+        outline: 0;
+        cursor: pointer;
+        background-color: var(--main-bg-color);
+        border-radius: 3px;
+        border: 1px solid var(--main-border-color);
+        height: 20px;
+        width: 20px;
+
+        &._active {
+            background: var(--main-bg-color) var(--icon-checkbox-checked-mark) no-repeat;
+            background-size: 70%;
+            background-position: center;
+        }
+    
+        input {
+            display: none;
+        }
+    }
+}

@@ -4,7 +4,7 @@ import { MarlboroLoggerService } from '../../../core/marlboro-logger/marlboro-lo
 import { ConfigService } from '@nestjs/config';
 import { ActionCustomContext } from '../types/custom-context.types';
 import { BotSubscriberMessageRepository } from '../bot.subscriber-message.repository';
-import { BotButtonsData } from '../constants/bot-buttons-data';
+import { BotButtonsDataConstant } from '../constants/bot-buttons-data.constant';
 import { AccountRepository } from '../../account/account.repository';
 import { AmoApiService } from '../../amo-api/amo-api.service';
 import { generateKeyboardByMessageSettings } from '../helpers/generate-keyboard.helper';
@@ -23,7 +23,7 @@ export class BotUnsortedActionsService extends Telegraf<TelegrafContext> {
         super(configService.get('BOT_TOKEN'));
     }
 
-    @Action(BotButtonsData.Unsorted.Accept)
+    @Action(BotButtonsDataConstant.Unsorted.Accept)
     private async acceptUnsortedLeadAction(@Ctx() acceptClickCtx: ActionCustomContext): Promise<void> {
         const loggerContext = `${BotUnsortedActionsService.name}/${this.acceptUnsortedLeadAction.name}`;
 
@@ -74,7 +74,7 @@ export class BotUnsortedActionsService extends Telegraf<TelegrafContext> {
         }
     }
 
-    @Action(BotButtonsData.Unsorted.Reject)
+    @Action(BotButtonsDataConstant.Unsorted.Reject)
     private async rejectUnsortedLeadAction(@Ctx() rejectClickCtx: ActionCustomContext): Promise<void> {
         const loggerContext = `${BotUnsortedActionsService.name}/${this.rejectUnsortedLeadAction.name}`;
 

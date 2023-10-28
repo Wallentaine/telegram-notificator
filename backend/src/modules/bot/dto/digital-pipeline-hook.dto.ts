@@ -1,6 +1,18 @@
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsBoolean, IsInt, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsInt, IsString, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+
+export class FillField {
+    fieldId: string;
+
+    fieldName: string;
+}
+
+export class SwapStage {
+    stageId: number;
+
+    stageName: string;
+}
 
 class DigitalPipelineEventData {
     id: number;
@@ -36,17 +48,67 @@ export class DigitalPipelineSettingsWidgetSettings {
     @Transform(({ value }) => value === 'true', { toClassOnly: true })
     requiredSwapStage: boolean;
 
-    requestSwapStage: string;
+    @ApiProperty({
+        example: '{"52214284":"Принимают решение","52214287":"Согласование договора"}',
+        description: '"Разрешённые этапы для смены"',
+    })
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => SwapStage)
+    @Transform(({ value }): SwapStage[] => {
+        const result: SwapStage[] = [];
+
+        const parsedValue = JSON.parse(value);
+
+        if (!parsedValue) {
+            return [];
+        }
+
+        for (const key in parsedValue) {
+            const stage = {
+                stageId: Number(key),
+                stageName: parsedValue[key],
+            };
+
+            result.push(stage);
+        }
+
+        return result;
+    })
+    requestSwapStage: SwapStage[];
+
+    @IsBoolean()
+    @Transform(({ value }) => value === 'true', { toClassOnly: true })
+    requiredSwapStageOnce: boolean;
 
     @IsBoolean()
     @Transform(({ value }) => value === 'true', { toClassOnly: true })
     requiredFillFields: boolean;
 
-    requestFillFields: string;
+    @ApiProperty({
+        example: '{"fields":[{"fieldId":"contacts_field_id:2989899","fieldName":"Дата рождения контакта"}]}',
+        description: 'Поля для заполнения',
+    })
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => FillField)
+    @Transform(({ value }): FillField[] => {
+        const parsedValue = JSON.parse(value) || { fields: [] };
+        if (parsedValue) {
+            return parsedValue.fields;
+        } else {
+            return [];
+        }
+    })
+    requestFillFields: FillField[];
 
     @IsBoolean()
     @Transform(({ value }) => value === 'true', { toClassOnly: true })
-    requiredUnsortedDescription: boolean;
+    requiredFillFieldsOnce: boolean;
+
+    @IsBoolean()
+    @Transform(({ value }) => value === 'true', { toClassOnly: true })
+    requiredDescription: boolean;
 }
 
 class DigitalPipelineSettingsWidget {

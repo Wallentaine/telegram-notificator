@@ -6,6 +6,4 @@ export class UpdateTelegramUsersDto {
     public amoUserId: number;
 
     public amoUserName: string;
-
-    public action: string;
 }
