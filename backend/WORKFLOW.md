@@ -9,3 +9,6 @@
 | CLIENT_SECRET | string | Секретный ключ приватной интеграции                                        |
 | REDIRECT_URI  | string | URL для перенаправления запроса (используется такой же как и в интеграции) |
 | BOT_TOKEN     | string | Токен телеграм бота                                                        |
+
+
+hello world!
